@@ -103,7 +103,7 @@ dependencies {
         api("org.mockito:mockito-inline:5.2.0")
         api("software.amazon.awssdk:bom:2.30.2")
         api("uk.org.webcompere:system-stubs-jupiter:2.1.7")
-        api("org.web3j:core:4.12.2")
+        api("org.web3j:core:5.0.0")
         api("tech.pegasys:jc-kzg-4844:1.0.0")
         api("com.hedera.cryptography:hedera-cryptography-bls:0.1.1-SNAPSHOT")
     }
