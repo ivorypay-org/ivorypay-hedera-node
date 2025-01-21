@@ -1,0 +1,68 @@
+{{- if .Values.zfs.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels: {{ include "hedera-mirror-common.selectorLabels" . | nindent 4 }}
+    app: zfs-init
+  name: {{ .Release.Name }}-zfs-init
+  namespace: {{ include "hedera-mirror-common.namespace" . }}
+spec:
+  selector:
+    matchLabels: {{ include "hedera-mirror-common.selectorLabels" . | nindent 6 }}
+      app: zfs-init
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/zfs/configmap-init.yaml") . | sha256sum }}
+      labels: {{ include "hedera-mirror-common.selectorLabels" . | nindent 8 }}
+        app: zfs-init
+    spec:
+      containers:
+        - image: registry.k8s.io/pause:latest
+          imagePullPolicy: {{ .Values.zfs.init.image.pullPolicy }}
+          name: pause
+      initContainers:
+        - image: "{{ .Values.zfs.init.image.registry }}/{{ .Values.zfs.init.image.repository }}:{{ .Values.zfs.init.image.tag }}"
+          imagePullPolicy: {{ .Values.zfs.init.image.pullPolicy }}
+          name: init
+          command: [ "/scripts/entrypoint.sh" ]
+          env:
+            - name: ARC_SIZE_GB
+              value: "{{ .Values.zfs.init.arcSizeGb }}"
+            - name: ROOT_MOUNT_DIR
+              value: /node
+            - name: DISK_PREFIX
+              value: {{ .Values.zfs.init.diskPrefix }}
+            - name: DEFAULT_DISK_SIZE_COORDINATOR
+              value: {{ .Values.zfs.coordinator.initialDiskSize }}
+            - name: DEFAULT_DISK_SIZE_WORKER
+              value: {{ .Values.zfs.worker.initialDiskSize }}
+            - name: K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: L2_ARC_NVME_DEVICE_ID
+              value: "{{ .Values.zfs.init.l2ArcNvmeDeviceId }}"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: node
+              mountPath: /node
+            - name: scripts
+              mountPath: /scripts
+      nodeSelector: {{ index .Values.zfs "zfs-localpv" "zfsNode" "nodeSelector" | toYaml | nindent 8 }}
+      priorityClassName: {{ .Values.zfs.priorityClassName }}
+      serviceAccountName: {{ .Values.zfs.init.serviceAccount.name }}
+      terminationGracePeriodSeconds: 1
+      tolerations: {{ index .Values.zfs "zfs-localpv" "zfsNode" "tolerations" | toYaml | nindent 8 }}
+      volumes:
+        - name: node
+          hostPath:
+            path: /
+        - name: scripts
+          configMap:
+            name: {{ .Release.Name }}-zfs-init
+            defaultMode: 0744
+  updateStrategy:
+    type: RollingUpdate
+{{- end -}}

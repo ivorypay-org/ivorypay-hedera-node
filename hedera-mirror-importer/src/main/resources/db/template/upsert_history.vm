@@ -1,0 +1,49 @@
+## @formatter:off
+
+## Updates from non-history rows
+with non_history as (
+  select $existingColumnsAs, t.*
+  from $finalTable e
+  join $tempTable t on $idJoin
+  where t.timestamp_range is null
+)
+insert into $finalTable ($insertColumns)
+select $coalesceColumns
+from non_history
+#if($skipPartialUpdate)
+where coalesce(e_created_timestamp, created_timestamp) is not null
+#end
+on conflict ($conflictColumns)
+do update set $updateColumns;
+
+## Updates from history rows
+with existing as (
+  select $existingColumnsAs, t.*
+  from $tempTable t
+  left join $finalTable e on $idJoin
+  where t.timestamp_range is not null
+), existing_history as (
+  insert into $historyTable ($insertColumns)
+  select distinct on ($conflictColumns) $existingColumns
+  from existing
+  where e_timestamp_range is not null and timestamp_range is not null
+  order by $conflictColumns, timestamp_range asc
+),
+temp_history as (
+  insert into $historyTable ($insertColumns)
+  select distinct $coalesceHistoryColumns
+  from existing
+  where upper(timestamp_range) is not null
+#if($skipPartialUpdate)
+  and coalesce(e_created_timestamp, created_timestamp) is not null
+#end
+)
+insert into $finalTable ($insertColumns)
+select $coalesceColumns
+from existing
+where timestamp_range is not null and upper(timestamp_range) is null
+#if($skipPartialUpdate)
+and coalesce(e_created_timestamp, created_timestamp) is not null
+#end
+on conflict ($conflictColumns)
+do update set $updateColumns;

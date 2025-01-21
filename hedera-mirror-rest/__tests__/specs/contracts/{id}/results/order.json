@@ -1,0 +1,71 @@
+{
+  "description": "Contract results api call for a specific contract using contract id with specified order",
+  "setup": {
+    "contractresults": [
+      {
+        "amount": 20,
+        "bloom": [1, 1],
+        "call_result": [2, 2],
+        "consensus_timestamp": "187654000123456",
+        "contract_id": 5001,
+        "gas_used": 101,
+        "transaction_hash": "0x181202030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "transaction_nonce": 0
+      },
+      {
+        "amount": 30,
+        "bloom": [3, 3],
+        "call_result": [4, 4],
+        "consensus_timestamp": "987654000123456",
+        "contract_id": 5001,
+        "created_contract_ids": [7001],
+        "gas_used": 102,
+        "transaction_hash": "0x981202030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "transaction_nonce": 0
+      }
+    ]
+  },
+  "url": "/api/v1/contracts/0.0.5001/results?order=asc",
+  "responseStatus": 200,
+  "responseJson": {
+    "results": [
+      {
+        "address": "0x0000000000000000000000000000000000001389",
+        "amount": 20,
+        "bloom": "0x0101",
+        "call_result": "0x0202",
+        "contract_id": "0.0.5001",
+        "created_contract_ids": [],
+        "error_message": null,
+        "from": "0x0000000000000000000000000000000000000065",
+        "function_parameters": "0x010102020303",
+        "gas_consumed": null,
+        "gas_limit": 1000,
+        "gas_used": 101,
+        "hash": "0x181202030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "timestamp": "187654.000123456",
+        "to": "0x0000000000000000000000000000000000001389"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000001389",
+        "amount": 30,
+        "bloom": "0x0303",
+        "call_result": "0x0404",
+        "contract_id": "0.0.5001",
+        "created_contract_ids": ["0.0.7001"],
+        "error_message": null,
+        "from": "0x0000000000000000000000000000000000000065",
+        "function_parameters": "0x010102020303",
+        "gas_consumed": null,
+        "gas_limit": 1000,
+        "gas_used": 102,
+        "hash": "0x981202030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+        "timestamp": "987654.000123456",
+        "to": "0x0000000000000000000000000000000000001389"
+      }
+    ],
+    "links": {
+      "next": null
+    }
+  }
+}

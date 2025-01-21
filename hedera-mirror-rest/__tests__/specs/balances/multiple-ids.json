@@ -1,0 +1,101 @@
+{
+  "description": "Balance api calls for specific accounts using multiple account.id query params",
+  "setup": {
+    "accounts": [
+      {
+        "num": 7
+      },
+      {
+        "num": 8
+      },
+      {
+        "alias": "KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ",
+        "evm_address": "ac384c53f03855fa1b3616052f8ba32c6c2a2fff",
+        "num": 9
+      }
+    ],
+    "balances": [
+      {
+        "timestamp": 2345,
+        "id": 2,
+        "balance": 2
+      },
+      {
+        "timestamp": 2345,
+        "id": 7,
+        "balance": 70
+      },
+      {
+        "timestamp": 2345,
+        "id": 8,
+        "balance": 80,
+        "tokens": [
+          {
+            "token_num": 90000,
+            "balance": 1000
+          },
+          {
+            "token_num": 80000,
+            "balance": 500
+          }
+        ]
+      },
+      {
+        "timestamp": 2345,
+        "id": 9,
+        "balance": 90
+      }
+    ],
+    "transactions": [],
+    "cryptotransfers": []
+  },
+  "tests": [
+    {
+      "urls": [
+        "/api/v1/balances?account.id=0.0.7&account.id=0.0.9&timestamp=0.0010023",
+        "/api/v1/balances?account.id=0.0.7&account.id=ac384c53f03855fa1b3616052f8ba32c6c2a2fff&timestamp=0.0010023",
+        "/api/v1/balances?account.id=0.0.7&account.id=KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ&timestamp=0.0010023"
+      ],
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "0.000002345",
+        "balances": [
+          {
+            "account": "0.0.9",
+            "balance": 90,
+            "tokens": []
+          },
+          {
+            "account": "0.0.7",
+            "balance": 70,
+            "tokens": []
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    },
+    {
+      "urls": [
+        "/api/v1/balances?account.id=0.0.7&account.id=0.0.500&timestamp=0.0010023",
+        "/api/v1/balances?account.id=0.0.7&account.id=ac384c53f03855fa1b3616052f8ba32c6c2a2ffe&timestamp=0.0010023",
+        "/api/v1/balances?account.id=0.0.7&account.id=AAAQEAYEAUDAOCAJCAIREEYUCULBOGAZ&timestamp=0.0010023"
+      ],
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "0.000002345",
+        "balances": [
+          {
+            "account": "0.0.7",
+            "balance": 70,
+            "tokens": []
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    }
+  ]
+}

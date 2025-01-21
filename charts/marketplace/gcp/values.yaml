@@ -1,0 +1,109 @@
+applicationResource:
+  enabled: true
+  partnerId: mirror-node-public
+  partnerName: mirror-node-public
+  solutionId: hedera-mirror-node
+  version: ""
+
+global:
+  useReleaseForNameLabel: true
+
+graphql:
+  enabled: false
+
+grpc:
+  config:
+    hedera:
+      mirror:
+        grpc:
+          listener:
+            type: NOTIFY
+    management:
+      endpoint:
+        health:
+          group:
+            readiness:
+              exclude: redis
+  hpa:
+    enabled: false
+  ingress:
+    enabled: false
+  rbac:
+    enabled: false
+  service:
+    type: LoadBalancer
+  serviceAccount:
+    create: false
+
+importer:
+  config:
+    hedera:
+      mirror:
+        importer:
+          downloader:
+            cloudProvider: GCP
+          parser:
+            record:
+              entity:
+                notify:
+                  enabled: true
+                redis:
+                  enabled: false
+    management:
+      endpoint:
+        health:
+          group:
+            readiness:
+              exclude: redis
+  rbac:
+    enabled: false
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+  serviceAccount:
+    create: false
+
+monitor:
+  enabled: false
+
+postgresql:
+  enabled: true
+  pgpool:
+    replicaCount: 0
+  serviceAccount:
+    create: false
+
+redis:
+  enabled: false
+
+rest:
+  config:
+    hedera:
+      mirror:
+        rest:
+          metrics:
+            config:
+              enabled: false
+  hpa:
+    enabled: false
+  ingress:
+    enabled: false
+  monitor:
+    enabled: false
+  rbac:
+    enabled: false
+  serviceAccount:
+    create: false
+  service:
+    type: LoadBalancer
+
+restjava:
+  enabled: false
+
+rosetta:
+  enabled: false
+
+web3:
+  enabled: false

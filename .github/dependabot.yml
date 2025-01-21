@@ -1,0 +1,49 @@
+version: 2
+updates:
+  - directory: "/"
+    open-pull-requests-limit: 10
+    package-ecosystem: "github-actions"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/"
+    open-pull-requests-limit: 10
+    package-ecosystem: "gradle"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/hedera-mirror-rest"
+    open-pull-requests-limit: 10
+    package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/hedera-mirror-rest/monitoring"
+    open-pull-requests-limit: 10
+    package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/hedera-mirror-rest/check-state-proof"
+    open-pull-requests-limit: 10
+    package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/hedera-mirror-rosetta"
+    open-pull-requests-limit: 10
+    package-ecosystem: "gomod"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/tools/traffic-replay/log-downloader"
+    open-pull-requests-limit: 10
+    package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+
+  - directory: "/tools/mirror-report"
+    open-pull-requests-limit: 10
+    package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"

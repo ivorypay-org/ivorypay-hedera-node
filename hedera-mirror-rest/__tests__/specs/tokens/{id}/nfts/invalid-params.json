@@ -1,0 +1,97 @@
+{
+  "description": "Token nfts api call using invalid params for a given token",
+  "setup": {},
+  "tests": [
+    {
+      "urls": [
+        "/api/v1/tokens/1500/nfts?account.id=me&serialnumber=2_2&order=random&limit=-1",
+        "/api/v1/tokens/1500/nfts?account.id=me&serialnumber=-1&order=random&limit=-1",
+        "/api/v1/tokens/1500/nfts?account.id=me&serialnumber=9223372036854775808&order=random&limit=-1"
+      ],
+      "responseStatus": 400,
+      "responseJson": {
+        "_status": {
+          "messages": [
+            {
+              "message": "Invalid parameter: account.id"
+            },
+            {
+              "message": "Invalid parameter: serialnumber"
+            },
+            {
+              "message": "Invalid parameter: order"
+            },
+            {
+              "message": "Invalid parameter: limit"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "/api/v1/tokens/1500/nfts?nonce=2",
+      "responseStatus": 400,
+      "responseJson": {
+        "_status": {
+          "messages": [
+            {
+              "message": "Unknown query parameter: nonce"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "/api/v1/tokens/1500/nfts?nonce=2",
+      "responseStatus": 400,
+      "responseJson": {
+        "_status": {
+          "messages": [
+            {
+              "message": "Unknown query parameter: nonce"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "/api/v1/tokens/1500/nfts?nonce=2",
+      "responseStatus": 400,
+      "responseJson": {
+        "_status": {
+          "messages": [
+            {
+              "message": "Unknown query parameter: nonce"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "/api/v1/tokens/1500/nfts?nonce=2",
+      "responseStatus": 400,
+      "responseJson": {
+        "_status": {
+          "messages": [
+            {
+              "message": "Unknown query parameter: nonce"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "url": "/api/v1/tokens/1500/nfts/3?account.id=5",
+      "responseStatus": 400,
+      "responseJson": {
+        "_status": {
+          "messages": [
+            {
+              "message": "Unknown query parameter: account.id"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

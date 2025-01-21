@@ -1,0 +1,32 @@
+{
+  "description": "Token info api call for non existent token",
+  "setup": {
+    "entities": [
+      {
+        "num": 1,
+        "type": "TOKEN"
+      }
+    ],
+    "tokens": [
+      {
+        "token_id": "0.0.1",
+        "symbol": "FIRSTMOVERLPDJH",
+        "type": "FUNGIBLE_COMMON"
+      }
+    ],
+    "balances": [],
+    "transactions": [],
+    "cryptotransfers": []
+  },
+  "url": "/api/v1/tokens/0.0.1135",
+  "responseStatus": 404,
+  "responseJson": {
+    "_status": {
+      "messages": [
+        {
+          "message": "Not found"
+        }
+      ]
+    }
+  }
+}

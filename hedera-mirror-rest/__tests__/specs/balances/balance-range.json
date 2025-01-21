@@ -1,0 +1,150 @@
+{
+  "description": "Balance api calls for a range of balances",
+  "setup": {
+    "accounts": [
+      {
+        "balance": 301,
+        "balance_timestamp": 12000000000,
+        "num": 17
+      },
+      {
+        "balance": 18,
+        "num": 18
+      },
+      {
+        "balance": 19,
+        "num": 19
+      },
+      {
+        "balance": 21,
+        "num": 21
+      }
+    ],
+    "balances": [
+      {
+        "timestamp": 2345,
+        "id": 2,
+        "balance": 2
+      },
+      {
+        "timestamp": 2345,
+        "id": 17,
+        "balance": 700,
+        "tokens": [
+          {
+            "token_num": 90000,
+            "balance": 1000
+          },
+          {
+            "token_num": 80000,
+            "balance": 500
+          }
+        ]
+      },
+      {
+        "timestamp": 2345,
+        "id": 18,
+        "balance": 200
+      },
+      {
+        "timestamp": 2345,
+        "id": 19,
+        "balance": 900
+      },
+      {
+        "timestamp": 2345,
+        "id": 20,
+        "balance": 450
+      },
+      {
+        "timestamp": 2345,
+        "id": 21,
+        "balance": 300
+      }
+    ],
+    "contracts": [
+      {
+        "balance": 500,
+        "num": 20
+      }
+    ],
+    "tokenaccounts": [
+      {
+        "token_id": "0.0.80000",
+        "account_id": "0.0.17",
+        "balance": 600,
+        "created_timestamp": "2340"
+      },
+      {
+        "token_id": "0.0.90000",
+        "account_id": "0.0.17",
+        "balance": 1100,
+        "created_timestamp": "2340"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "url": "/api/v1/balances?account.balance=gt:300&account.balance=lte:700&&order=asc",
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "12.000000000",
+        "balances": [
+          {
+            "account": "0.0.17",
+            "balance": 301,
+            "tokens": [
+              {
+                "token_id": "0.0.80000",
+                "balance": 600
+              },
+              {
+                "token_id": "0.0.90000",
+                "balance": 1100
+              }
+            ]
+          },
+          {
+            "account": "0.0.20",
+            "balance": 500,
+            "tokens": []
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    },
+    {
+      "url": "/api/v1/balances?account.balance=gt:300&account.balance=lte:700&order=asc&timestamp=12",
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "0.000002345",
+        "balances": [
+          {
+            "account": "0.0.17",
+            "balance": 700,
+            "tokens": [
+              {
+                "token_id": "0.0.80000",
+                "balance": 500
+              },
+              {
+                "token_id": "0.0.90000",
+                "balance": 1000
+              }
+            ]
+          },
+          {
+            "account": "0.0.20",
+            "balance": 450,
+            "tokens": []
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    }
+  ]
+}

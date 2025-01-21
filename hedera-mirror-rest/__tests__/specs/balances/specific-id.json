@@ -1,0 +1,139 @@
+{
+  "description": "Balance api calls for a specific account",
+  "setup": {
+    "accounts": [
+      {
+        "balance": 7,
+        "num": 7
+      },
+      {
+        "alias": "KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ",
+        "evm_address": "ac384c53f03855fa1b3616052f8ba32c6c2a2fec",
+        "balance": 8,
+        "balance_timestamp": 12000000000,
+        "num": 8
+      },
+      {
+        "balance": 9,
+        "num": 9
+      }
+    ],
+    "balances": [
+      {
+        "timestamp": 2345,
+        "id": 2,
+        "balance": 2
+      },
+      {
+        "timestamp": 2345,
+        "id": 7,
+        "balance": 70
+      },
+      {
+        "timestamp": 2345,
+        "id": 8,
+        "balance": 80,
+        "tokens": [
+          {
+            "token_num": 90000,
+            "balance": 1000
+          },
+          {
+            "token_num": 80000,
+            "balance": 500
+          }
+        ]
+      },
+      {
+        "timestamp": 2345,
+        "id": 9,
+        "balance": 90
+      }
+    ],
+    "tokenaccounts": [
+      {
+        "token_id": "0.0.80000",
+        "account_id": "0.0.8",
+        "balance": 501,
+        "created_timestamp": "2340"
+      },
+      {
+        "token_id": "0.0.90000",
+        "account_id": "0.0.8",
+        "balance": 1001,
+        "created_timestamp": "2340"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "urls": [
+        "/api/v1/balances?account.id=0.0.8&timestamp=10",
+        "/api/v1/balances?account.id=0.8&timestamp=10",
+        "/api/v1/balances?account.id=8&timestamp=10",
+        "/api/v1/balances?account.id=ac384c53f03855fa1b3616052f8ba32c6c2a2fec&timestamp=10",
+        "/api/v1/balances?account.id=0xac384c53f03855fa1b3616052f8ba32c6c2a2fec&timestamp=10",
+        "/api/v1/balances?account.id=0x0000000000000000000000000000000000000008&timestamp=10",
+        "/api/v1/balances?account.id=KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ&timestamp=10"
+      ],
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "0.000002345",
+        "balances": [
+          {
+            "account": "0.0.8",
+            "balance": 80,
+            "tokens": [
+              {
+                "token_id": "0.0.90000",
+                "balance": 1000
+              },
+              {
+                "token_id": "0.0.80000",
+                "balance": 500
+              }
+            ]
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    },
+    {
+      "urls": [
+        "/api/v1/balances?account.id=0.0.8",
+        "/api/v1/balances?account.id=0.8",
+        "/api/v1/balances?account.id=8",
+        "/api/v1/balances?account.id=ac384c53f03855fa1b3616052f8ba32c6c2a2fec",
+        "/api/v1/balances?account.id=0xac384c53f03855fa1b3616052f8ba32c6c2a2fec",
+        "/api/v1/balances?account.id=0000000000000000000000000000000000000008",
+        "/api/v1/balances?account.id=0x0000000000000000000000000000000000000008",
+        "/api/v1/balances?account.id=KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ"
+      ],
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "12.000000000",
+        "balances": [
+          {
+            "account": "0.0.8",
+            "balance": 8,
+            "tokens": [
+              {
+                "token_id": "0.0.90000",
+                "balance": 1001
+              },
+              {
+                "token_id": "0.0.80000",
+                "balance": 501
+              }
+            ]
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    }
+  ]
+}

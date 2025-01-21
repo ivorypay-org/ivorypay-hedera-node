@@ -1,0 +1,28 @@
+importer:
+  config:
+    hedera:
+      mirror:
+        importer:
+          db:
+            loadBalance: false
+          parser:
+            record:
+              entity:
+                persist:
+                  entityTransactions: false
+                  topicMessageLookups: true
+  env:
+    SPRING_PROFILES_ACTIVE: v2
+postgresql:
+  enabled: false
+rest:
+  config:
+    hedera:
+      mirror:
+        rest:
+          query:
+            bindTimestampRange: true
+            topicMessageLookup: true
+stackgres:
+  enabled: true
+

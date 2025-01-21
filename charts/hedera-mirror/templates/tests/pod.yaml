@@ -1,0 +1,59 @@
+{{- if .Values.test.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations: {{- toYaml .Values.test.annotations | nindent 4 }}
+  labels: {{- include "hedera-mirror-acceptance.labels" . | nindent 4 }}
+    app.kubernetes.io/name: acceptance
+  name: {{ include "hedera-mirror.fullname" . }}-acceptance
+  namespace: {{ include "hedera-mirror.namespace" . }}
+spec:
+  containers:
+    - name: acceptance
+      args: {{- tpl (toYaml .Values.test.args) $ | nindent 8 }}
+      {{ $image := mergeOverwrite .Values.test.image .Values.global.image -}}
+      image: "{{ $image.registry }}/{{ $image.repository }}:{{ $image.tag | default .Chart.AppVersion }}"
+      imagePullPolicy: {{ .Values.test.image.pullPolicy }}
+      env:
+        - name: SPRING_CONFIG_ADDITIONALLOCATION
+          value: /etc/secrets/
+        {{- range $name, $value := .Values.test.env }}
+        - name: {{ $name }}
+        {{- if kindIs "string" $value }}
+          value: {{ tpl $value $ | quote }}
+        {{- else }}
+        {{- tpl (toYaml $value) $ | nindent 14 }}
+        {{- end }}
+        {{- end }}
+      resources: {{ toYaml .Values.test.resources | nindent 8 }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ALL]
+        readOnlyRootFilesystem: true
+      volumeMounts:
+        - name: config
+          mountPath: /etc/secrets
+          readOnly: true
+        - mountPath: /tmp
+          name: tmp
+  imagePullSecrets: {{ toYaml .Values.test.image.pullSecrets | nindent 4 }}
+  priorityClassName: {{ .Values.test.priorityClassName }}
+  securityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 1
+  volumes:
+    - name: config
+      secret:
+        defaultMode: 420
+        secretName: {{ include "hedera-mirror.fullname" . }}-acceptance
+    - name: tmp
+      emptyDir:
+        medium: Memory
+{{- end -}}

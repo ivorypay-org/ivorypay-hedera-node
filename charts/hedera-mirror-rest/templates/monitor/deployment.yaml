@@ -1,0 +1,73 @@
+{{- if .Values.monitor.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {{ toYaml .Values.annotations | nindent 4 }}
+  labels: {{ include "hedera-mirror-rest-monitor.labels" . | nindent 4 }}
+  name: {{ include "hedera-mirror-rest.fullname" . }}-monitor
+  namespace: {{ include "hedera-mirror-rest.namespace" . }}
+spec:
+  replicas: {{ .Values.monitor.replicas }}
+  selector:
+    matchLabels: {{ include "hedera-mirror-rest-monitor.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/monitor/secret.yaml") . | sha256sum }}
+        {{- if or .Values.podAnnotations .Values.global.podAnnotations }}
+        {{- tpl (mergeOverwrite .Values.podAnnotations .Values.global.podAnnotations | toYaml) $ | nindent 8 }}
+        {{- end }}
+      labels: {{ include "hedera-mirror-rest-monitor.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: rest-monitor
+          env:
+            - name: CONFIG_PATH
+              value: "/config"
+          {{ $image := mergeOverwrite .Values.monitor.image .Values.global.image -}}
+          image: "{{ $image.registry }}/{{ $image.repository }}:{{ $image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ $image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: api
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+          ports:
+            - containerPort: 3000
+              name: api
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: api
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+          resources: {{ toYaml .Values.monitor.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ ALL ]
+            readOnlyRootFilesystem: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      imagePullSecrets: {{ toYaml .Values.monitor.image.pullSecrets | nindent 8 }}
+      nodeSelector: {{ toYaml .Values.monitor.nodeSelector | nindent 8 }}
+      priorityClassName: {{ .Values.monitor.priorityClassName }}
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: {{ include "hedera-mirror-rest.serviceAccountName" . }}
+      tolerations: {{ toYaml .Values.monitor.tolerations | nindent 8 }}
+      volumes:
+        - name: config
+          secret:
+            secretName: {{ include "hedera-mirror-rest.fullname" . }}-monitor
+{{- end }}

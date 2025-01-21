@@ -1,0 +1,224 @@
+# These values are production values used in combination with the hedera-mirror-common chart
+alertmanager:
+  inhibitRules:
+    enabled: true
+
+global:
+  middleware: true
+
+graphql:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  hpa:
+    enabled: true
+    minReplicas: 2
+  podDisruptionBudget:
+    enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+  test:
+    priorityClassName: high
+
+grpc:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  hpa:
+    enabled: true
+    minReplicas: 2
+  podDisruptionBudget:
+    enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
+  serviceMonitor:
+    enabled: true
+
+importer:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  podMonitor:
+    enabled: true
+  priorityClassName: high
+  prometheusRules:
+    enabled: true
+  replicas: 1
+
+monitor:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+
+postgresql:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  pgpool:
+    priorityClassName: critical
+    replicaCount: 2
+  postgresql:
+    priorityClassName: critical
+    upgradeRepmgrExtension: false
+    replicaCount: 2
+
+redis:
+  metrics:
+    enabled: true
+    sentinel:
+      enabled: true
+  replica:
+    priorityClassName: critical
+    replicaCount: 3
+
+rest:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  hpa:
+    minReplicas: 2
+  monitor:
+    test:
+      priorityClassName: high
+  podDisruptionBudget:
+    enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+  test:
+    priorityClassName: high
+
+restjava:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  hpa:
+    enabled: true
+    minReplicas: 2
+  podDisruptionBudget:
+    enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+  test:
+    priorityClassName: high
+
+rosetta:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  hpa:
+    minReplicas: 2
+  podDisruptionBudget:
+    enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+  test:
+    priorityClassName: high
+
+stackgres:
+  backup:
+    enabled: false
+    instances:
+    - retention: 7
+      cronSchedule: "45 22 * * *"
+      compression: lz4
+      useVolumeSnapshot: true
+      fastVolumeSnapshot: false # Can be true once StackGres issue 2887 is resolved
+      volumeSnapshotClass: zfs
+      performance:
+        uploadDiskConcurrency: 1 # Can be 4 once StackGres issue 2887 is resolved
+    objectStorage:
+      endpoint: http://mirror-minio.common:9000
+      bucket: stackgres-backup
+      storageCredsSecretName: mirror-minio
+      storageCredsNamespace: common
+  coordinator:
+    instances: 2
+    resources:
+      cpu: 7350m
+      memory: 24Gi
+      requests:
+        containers:
+          backup.create-backup:
+            memory: 512Mi
+            cpu: 1500m
+          cluster-controller:
+            cpu: 500m
+          envoy:
+            cpu: 750m
+          patroni:
+            cpu: 7350m
+          pgbouncer:
+            cpu: 300m
+          prometheus-postgres-exporter:
+            cpu: 100m
+    persistentVolume:
+      size: 256Gi
+      storageClass: zfs
+  priorityClassName: critical
+  worker:
+    instances: 3
+    replicasPerInstance: 1
+    resources:
+      cpu: 9500m
+      memory: 40Gi
+      requests:
+        containers:
+          backup.create-backup:
+            memory: 512Mi
+            cpu: 1500m
+          cluster-controller:
+            cpu: 500m
+          envoy:
+            cpu: 750m
+          patroni:
+            cpu: 9500m
+          pgbouncer:
+            cpu: 300m
+          prometheus-postgres-exporter:
+            cpu: 100m
+    persistentVolume:
+      size: 300Gi
+      storageClass: zfs
+
+test:
+  priorityClassName: high
+
+web3:
+  alertmanager:
+    inhibitRules:
+      enabled: true
+  hpa:
+    enabled: true
+    minReplicas: 2
+  podDisruptionBudget:
+    enabled: true
+  priorityClassName: medium
+  prometheusRules:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+  test:
+    priorityClassName: high

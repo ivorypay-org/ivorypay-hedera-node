@@ -1,0 +1,146 @@
+{
+  "description": "Account api call for all token allowances",
+  "setup": {
+    "accounts": [
+      {
+        "num": 1001,
+        "alias": "KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ",
+        "evm_address": "ebb9a1be370150759408cd7af48e9eda2b8ead57"
+      },
+      {
+        "num": 2001
+      },
+      {
+        "num": 3001
+      },
+      {
+        "num": 4001
+      },
+      {
+        "num": 5001
+      }
+    ],
+    "tokenAllowances": [
+      {
+        "amount": 23,
+        "amount_granted": 33,
+        "owner": 1001,
+        "spender": 2001,
+        "token_id": 10001,
+        "timestamp_range": "[1234567890000000001,)"
+      },
+      {
+        "amount": 34,
+        "amount_granted": 44,
+        "owner": 1001,
+        "spender": 3001,
+        "token_id": 10002,
+        "timestamp_range": "[1234567890000000002,)"
+      },
+      {
+        "amount": 45,
+        "amount_granted": 55,
+        "owner": 2001,
+        "spender": 3001,
+        "token_id": 10001,
+        "timestamp_range": "[1234567890000000003,)"
+      },
+      {
+        "amount": 56,
+        "amount_granted": 66,
+        "owner": 1001,
+        "spender": 4001,
+        "token_id": 10006,
+        "timestamp_range": "[1234567890000000004,)"
+      },
+      {
+        "amount": 9223372036854775797,
+        "amount_granted": 9223372036854775807,
+        "owner": 1001,
+        "spender": 5001,
+        "token_id": 10005,
+        "timestamp_range": "[1234567890000000005,)"
+      },
+      {
+        "amount": 0,
+        "amount_granted": 100,
+        "owner": 1001,
+        "spender": 5001,
+        "token_id": 20005,
+        "timestamp_range": "[1234567890000000005,)"
+      },
+      {
+        "amount": 0,
+        "amount_granted": 0,
+        "owner": 1001,
+        "spender": 5001,
+        "token_id": 20006,
+        "timestamp_range": "[1234567890000000005,)"
+      }
+    ]
+  },
+  "urls": [
+    "/api/v1/accounts/1001/allowances/tokens",
+    "/api/v1/accounts/0.1001/allowances/tokens",
+    "/api/v1/accounts/0.0.1001/allowances/tokens",
+    "/api/v1/accounts/0x00000000000000000000000000000000000003e9/allowances/tokens",
+    "/api/v1/accounts/KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ/allowances/tokens",
+    "/api/v1/accounts/0.KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ/allowances/tokens",
+    "/api/v1/accounts/0.0.KGNABD5L3ZGSRVUCSPDR7TONZSRY3D5OMEBKQMVTD2AC6JL72HMQ/allowances/tokens",
+    "/api/v1/accounts/ebb9a1be370150759408cd7af48e9eda2b8ead57/allowances/tokens",
+    "/api/v1/accounts/0xebb9a1be370150759408cd7af48e9eda2b8ead57/allowances/tokens",
+    "/api/v1/accounts/0.0.ebb9a1be370150759408cd7af48e9eda2b8ead57/allowances/tokens"
+  ],
+  "responseStatus": 200,
+  "responseJson": {
+    "allowances": [
+      {
+        "amount": 23,
+        "amount_granted": 33,
+        "owner": "0.0.1001",
+        "spender": "0.0.2001",
+        "token_id": "0.0.10001",
+        "timestamp": {
+          "from": "1234567890.000000001",
+          "to": null
+        }
+      },
+      {
+        "amount": 34,
+        "amount_granted": 44,
+        "owner": "0.0.1001",
+        "spender": "0.0.3001",
+        "token_id": "0.0.10002",
+        "timestamp": {
+          "from": "1234567890.000000002",
+          "to": null
+        }
+      },
+      {
+        "amount": 56,
+        "amount_granted": 66,
+        "owner": "0.0.1001",
+        "spender": "0.0.4001",
+        "token_id": "0.0.10006",
+        "timestamp": {
+          "from": "1234567890.000000004",
+          "to": null
+        }
+      },
+      {
+        "amount": 9223372036854775797,
+        "amount_granted": 9223372036854775807,
+        "owner": "0.0.1001",
+        "spender": "0.0.5001",
+        "token_id": "0.0.10005",
+        "timestamp": {
+          "from": "1234567890.000000005",
+          "to": null
+        }
+      }
+    ],
+    "links": {
+      "next": null
+    }
+  }
+}

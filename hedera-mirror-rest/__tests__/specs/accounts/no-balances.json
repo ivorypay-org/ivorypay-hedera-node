@@ -1,0 +1,236 @@
+{
+  "description": "Account api calls for all accounts, some with no balances",
+  "setup": {
+    "accounts": [
+      {
+        "balance": 10,
+        "balance_timestamp": "2010",
+        "num": 1
+      },
+      {
+        "balance": 20,
+        "balance_timestamp": "2020",
+        "num": 2
+      },
+      {
+        "num": 3
+      },
+      {
+        "num": 4
+      },
+      {
+        "balance": 50,
+        "balance_timestamp": "2050",
+        "num": 5
+      }
+    ],
+    "entities": [
+      {
+        "num": 6,
+        "type": "FILE"
+      },
+      {
+        "num": 7,
+        "type": "TOPIC"
+      },
+      {
+        "num": 8,
+        "type": "TOKEN"
+      }
+    ],
+    "tokenaccounts": [
+      {
+        "token_id": "0.0.90000",
+        "account_id": "0.0.1",
+        "balance": 6,
+        "created_timestamp": "1800"
+      },
+      {
+        "token_id": "0.0.90001",
+        "account_id": "0.0.1",
+        "balance": 11,
+        "created_timestamp": "1800"
+      },
+      {
+        "token_id": "0.0.90001",
+        "account_id": "0.0.2",
+        "balance": 2,
+        "created_timestamp": "1800"
+      },
+      {
+        "token_id": "0.0.90010",
+        "account_id": "0.0.2",
+        "balance": 22,
+        "created_timestamp": "1800"
+      },
+      {
+        "token_id": "0.0.100001",
+        "account_id": "0.0.5",
+        "balance": 5,
+        "created_timestamp": "1800"
+      },
+      {
+        "token_id": "0.0.100002",
+        "account_id": "0.0.5",
+        "balance": 55,
+        "created_timestamp": "1800"
+      }
+    ]
+  },
+  "url": "/api/v1/accounts",
+  "responseStatus": 200,
+  "responseJson": {
+    "accounts": [
+      {
+        "balance": {
+          "balance": 10,
+          "timestamp": "0.000002010",
+          "tokens": [
+            {
+              "token_id": "0.0.90000",
+              "balance": 6
+            },
+            {
+              "token_id": "0.0.90001",
+              "balance": 11
+            }
+          ]
+        },
+        "account": "0.0.1",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000001",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 20,
+          "timestamp": "0.000002020",
+          "tokens": [
+            {
+              "token_id": "0.0.90001",
+              "balance": 2
+            },
+            {
+              "token_id": "0.0.90010",
+              "balance": 22
+            }
+          ]
+        },
+        "account": "0.0.2",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000002",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": null,
+          "timestamp": null,
+          "tokens": []
+        },
+        "account": "0.0.3",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000003",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": null,
+          "timestamp": null,
+          "tokens": []
+        },
+        "account": "0.0.4",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000004",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 50,
+          "timestamp": "0.000002050",
+          "tokens": [
+            {
+              "token_id": "0.0.100001",
+              "balance": 5
+            },
+            {
+              "token_id": "0.0.100002",
+              "balance": 55
+            }
+          ]
+        },
+        "account": "0.0.5",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000005",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      }
+    ],
+    "links": {
+      "next": null
+    }
+  }
+}

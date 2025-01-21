@@ -1,0 +1,43 @@
+{{- if .Values.test.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations: {{- toYaml .Values.test.annotations | nindent 4 }}
+  labels: {{- include "hedera-mirror-rest.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "hedera-mirror-rest.name" . }}-test
+  name: {{ include "hedera-mirror-rest.fullname" . }}-test
+  namespace: {{ include "hedera-mirror-rest.namespace" . }}
+data:
+  test.sh: |-
+    #!/usr/bin/env bash
+    set -o pipefail
+    set -o errexit
+
+    URI='http://{{ include "hedera-mirror-rest.fullname" . }}:{{ .Values.service.port }}/api/v1'
+
+    function setup() {
+      apk add -qu curl jq
+    }
+
+    # Infinite loop is okay since helm test itself has a timeout
+    function has_data() {
+      local name="${1}"
+      until (curl -s "${URI}/${name}?limit=1" | jq -e ".${name} | length >= 1"); do
+        echo "Waiting for ${name} data" >&3
+        sleep 2
+      done
+    }
+
+    {{ if .Values.test.checks.accounts -}}
+    @test "Has accounts" {
+      has_data "accounts"
+    }
+    {{- end }}
+
+    {{ if .Values.test.checks.transactions -}}
+    @test "Has transactions" {
+      has_data "transactions"
+    }
+    {{- end -}}
+{{- end -}}
+

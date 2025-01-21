@@ -1,0 +1,17 @@
+{
+  "description": "Network supply API with no accounts",
+  "setup": {
+    "accounts": []
+  },
+  "url": "/api/v1/network/supply",
+  "responseStatus": 404,
+  "responseJson": {
+    "_status": {
+      "messages": [
+        {
+          "message": "Not found"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+# CT generates release names that are too long for postgresql-ha, so we override it here
+graphql:
+  enabled: true
+  test:
+    defaultAccount: 111146
+importer:
+  # Ensure importer has time to start stream processing after startup
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 15
+    successThreshold: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+monitor:
+  enabled: false
+postgresql:
+  fullnameOverride: db
+rest:
+  monitor:
+    config:
+      contract:
+        logs: false
+      freshness: false
+      interval: 5
+      network:
+        enabled: false
+      retry:
+        maxAttempts: 1
+      schedule:
+        enabled: false
+      stateproof:
+        enabled: false
+  resources:
+    requests:
+      cpu: 200m
+restjava:
+  enabled: true
+  resources:
+    requests:
+      cpu: 200m
+      memory: 128Mi
+rosetta:
+  enabled: true
+web3:
+  env:
+    HEDERA_MIRROR_WEB3_EVM_NETWORK: OTHER
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi

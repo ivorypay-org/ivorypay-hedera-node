@@ -1,0 +1,103 @@
+{
+  "description": "Balance api calls for specific account with a matching public key",
+  "setup": {
+    "accounts": [
+      {
+        "balance": 7,
+        "num": 7,
+        "public_key": "6ceecd8bb224da4914d53f292e5624f6f4cf8c134c920e1cac8d06f879df5819"
+      },
+      {
+        "balance": 8,
+        "balance_timestamp": 12000000000,
+        "num": 8,
+        "public_key": "519a008fabde4d28d68293c71fcdcdcca38d8fae6102a832b31e802f257fd1d9"
+      },
+      {
+        "balance": 9,
+        "num": 9,
+        "public_key": "3c3d546321ff6f63d701d2ec5c277095874e19f4a235bee1e6bb19258bf362be"
+      }
+    ],
+    "balances": [
+      {
+        "timestamp": 2345,
+        "id": 2,
+        "balance": 2
+      },
+      {
+        "timestamp": 2345,
+        "id": 7,
+        "balance": 70
+      },
+      {
+        "timestamp": 2345,
+        "id": 8,
+        "balance": 80
+      },
+      {
+        "timestamp": 2345,
+        "id": 9,
+        "balance": 90
+      },
+      {
+        "timestamp": 2345,
+        "id": 10,
+        "balance": 115
+      }
+    ],
+    "contracts": [
+      {
+        "balance": 10,
+        "num": 10,
+        "public_key": "519a008fabde4d28d68293c71fcdcdcca38d8fae6102a832b31e802f257fd1d9"
+      }
+    ]
+  },
+  "tests": [
+    {
+      "url": "/api/v1/balances?account.publickey=519a008fabde4d28d68293c71fcdcdcca38d8fae6102a832b31e802f257fd1d9&timestamp=10",
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "0.000002345",
+        "balances": [
+          {
+            "account": "0.0.10",
+            "balance": 115,
+            "tokens": []
+          },
+          {
+            "account": "0.0.8",
+            "balance": 80,
+            "tokens": []
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    },
+    {
+      "url": "/api/v1/balances?account.publickey=519a008fabde4d28d68293c71fcdcdcca38d8fae6102a832b31e802f257fd1d9",
+      "responseStatus": 200,
+      "responseJson": {
+        "timestamp": "12.000000000",
+        "balances": [
+          {
+            "account": "0.0.10",
+            "balance": 10,
+            "tokens": []
+          },
+          {
+            "account": "0.0.8",
+            "balance": 8,
+            "tokens": []
+          }
+        ],
+        "links": {
+          "next": null
+        }
+      }
+    }
+  ]
+}

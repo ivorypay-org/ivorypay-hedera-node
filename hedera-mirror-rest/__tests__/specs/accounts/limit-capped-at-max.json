@@ -1,0 +1,300 @@
+{
+  "description": "Account api calls with limit capped at max (6), token balance capped at max (2)",
+  "extendedDescription": [
+    "The default and max limits in config are overridden to 3 and 6 respectively. With limit=10 in the query, the ",
+    "number of accounts in the response should be capped at 6 and there should be a next link. The number of token ",
+    "balances for each account is also capped at a max of 2"
+  ],
+  "setup": {
+    "config": {
+      "response": {
+        "limit": {
+          "default": 3,
+          "max": 6,
+          "tokenBalance": {
+            "multipleAccounts": 2
+          }
+        }
+      }
+    },
+    "accounts": [
+      {
+        "balance": 10,
+        "balance_timestamp": "2010",
+        "num": 1
+      },
+      {
+        "balance": 20,
+        "balance_timestamp": "2020",
+        "num": 2
+      },
+      {
+        "balance": 30,
+        "balance_timestamp": "2030",
+        "num": 3
+      },
+      {
+        "balance": 40,
+        "balance_timestamp": "2040",
+        "num": 4
+      },
+      {
+        "balance": 50,
+        "balance_timestamp": "2050",
+        "num": 5
+      },
+      {
+        "balance": 60,
+        "balance_timestamp": "2060",
+        "num": 6
+      },
+      {
+        "balance": 70,
+        "num": 7
+      },
+      {
+        "balance": 80,
+        "num": 8
+      },
+      {
+        "balance": 90,
+        "num": 9,
+        "expiration_timestamp": "-9223372036854775808",
+        "max_automatic_token_associations": 150,
+        "receiver_sig_required": null
+      },
+      {
+        "balance": 100,
+        "num": 10,
+        "expiration_timestamp": "9223372036854775807",
+        "receiver_sig_required": true
+      }
+    ],
+    "tokenaccounts": [
+      {
+        "token_id": "0.0.90000",
+        "account_id": "0.0.1",
+        "balance": 1,
+        "created_timestamp": "2300"
+      },
+      {
+        "token_id": "0.0.90001",
+        "account_id": "0.0.1",
+        "balance": 11,
+        "created_timestamp": "2300"
+      },
+      {
+        "token_id": "0.0.90001",
+        "account_id": "0.0.2",
+        "balance": 2,
+        "created_timestamp": "2300"
+      },
+      {
+        "token_id": "0.0.90010",
+        "account_id": "0.0.2",
+        "balance": 22,
+        "created_timestamp": "2300"
+      },
+      {
+        "token_id": "0.0.100001",
+        "account_id": "0.0.5",
+        "balance": 5,
+        "created_timestamp": "2300"
+      },
+      {
+        "token_id": "0.0.100002",
+        "account_id": "0.0.5",
+        "balance": 55,
+        "created_timestamp": "2300"
+      },
+      {
+        "token_id": "0.0.100003",
+        "account_id": "0.0.5",
+        "balance": 55,
+        "created_timestamp": "2300"
+      }
+    ],
+    "transactions": [],
+    "cryptotransfers": []
+  },
+  "url": "/api/v1/accounts?limit=10",
+  "responseStatus": 200,
+  "responseJson": {
+    "accounts": [
+      {
+        "balance": {
+          "balance": 10,
+          "timestamp": "0.000002010",
+          "tokens": [
+            {
+              "token_id": "0.0.90000",
+              "balance": 1
+            },
+            {
+              "token_id": "0.0.90001",
+              "balance": 11
+            }
+          ]
+        },
+        "account": "0.0.1",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000001",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 20,
+          "timestamp": "0.000002020",
+          "tokens": [
+            {
+              "token_id": "0.0.90001",
+              "balance": 2
+            },
+            {
+              "token_id": "0.0.90010",
+              "balance": 22
+            }
+          ]
+        },
+        "account": "0.0.2",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000002",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 30,
+          "timestamp": "0.000002030",
+          "tokens": []
+        },
+        "account": "0.0.3",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000003",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 40,
+          "timestamp": "0.000002040",
+          "tokens": []
+        },
+        "account": "0.0.4",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000004",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 50,
+          "timestamp": "0.000002050",
+          "tokens": [
+            {
+              "token_id": "0.0.100001",
+              "balance": 5
+            },
+            {
+              "token_id": "0.0.100002",
+              "balance": 55
+            }
+          ]
+        },
+        "account": "0.0.5",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000005",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      },
+      {
+        "balance": {
+          "balance": 60,
+          "timestamp": "0.000002060",
+          "tokens": []
+        },
+        "account": "0.0.6",
+        "alias": null,
+        "created_timestamp": null,
+        "decline_reward": false,
+        "deleted": false,
+        "ethereum_nonce": null,
+        "evm_address": "0x0000000000000000000000000000000000000006",
+        "expiry_timestamp": null,
+        "auto_renew_period": null,
+        "key": null,
+        "max_automatic_token_associations": 0,
+        "memo": "entity memo",
+        "pending_reward": 0,
+        "receiver_sig_required": false,
+        "staked_account_id": null,
+        "staked_node_id": null,
+        "stake_period_start": null
+      }
+    ],
+    "links": {
+      "next": "/api/v1/accounts?limit=10&account.id=gt:0.0.6"
+    }
+  }
+}

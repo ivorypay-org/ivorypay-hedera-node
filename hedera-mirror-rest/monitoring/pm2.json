@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "cwd": "./",
+      "exec_mode": "fork_mode",
+      "script": "./server.js",
+      "name": "monitor-api",
+      "node_args": "--import=extensionless/register",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

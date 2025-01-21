@@ -1,0 +1,15 @@
+{
+  "description": "Balance api invalid query",
+  "setup": {},
+  "url": "/api/v1/balances?consensus=hashgraph",
+  "responseStatus": 400,
+  "responseJson": {
+    "_status": {
+      "messages": [
+        {
+          "message": "Unknown query parameter: consensus"
+        }
+      ]
+    }
+  }
+}

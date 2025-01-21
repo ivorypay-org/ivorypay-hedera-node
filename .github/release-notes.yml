@@ -1,0 +1,20 @@
+changelog:
+  contributors:
+    exclude:
+      names: ["dependabot[bot]", "hedera-github-bot"]
+    title: "Contributors"
+  issues:
+    exclude:
+      labels: ["wontfix", "question", "duplicate", "invalid"]
+  repository: hashgraph/hedera-mirror-node
+  sections:
+    - title: "Enhancements"
+      labels: ["enhancement", "epic"]
+    - title: "Bug Fixes"
+      labels: ["bug"]
+    - title: "Documentation"
+      labels: ["documentation"]
+    - title: "Dependency Upgrades"
+      labels: ["dependencies"]
+    - title: "Deployments"
+      labels: ["deploy"]

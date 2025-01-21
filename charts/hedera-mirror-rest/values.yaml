@@ -1,0 +1,331 @@
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/component: rest
+
+alertmanager:
+  inhibitRules:
+    enabled: false
+    InhibitAllWhenPodIssues:
+      enabled: true
+      matches:
+        - sourceMatch:
+            - name: area
+              value: resource
+          targetMatch:
+            - name: application
+              value: hedera-mirror-rest
+          equal:
+            - namespace
+            - pod
+
+annotations: {}
+
+config: {}
+
+# Environment variables to add to the container. The value can either be a string or an EnvVarSource. Evaluated as a template.
+env:
+  CONFIG_PATH: "/usr/etc/hedera/"
+  # FOO:
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: '{{ .Release.Name }}-custom'
+  #       key: BAR
+
+# Add config maps or secrets as environment variables. Evaluated as a template.
+envFrom: []
+# - secretRef:
+#     name: '{{ .Release.Name }}-env'
+
+fullnameOverride: ""
+
+gateway:
+  gcp:
+    backendPolicy:
+      connectionDraining:
+        drainingTimeoutSec: 10
+      logging:
+        enabled: false
+      maxRatePerEndpoint: 250  # Requires a change to HPA to take effect
+      sessionAffinity:
+        type: CLIENT_IP
+      timeoutSec: 20
+    enabled: true
+    healthCheckPolicy:
+      config:
+        httpHealthCheck:
+          port: 5551
+          requestPath: "{{ .Values.readinessProbe.httpGet.path }}"
+        type: HTTP
+      healthyThreshold: 1
+  rules:
+    - backendRefs:
+        - group: "{{ .Values.gateway.target.group }}"
+          kind: "{{ .Values.gateway.target.kind }}"
+          name: "{{ include \"hedera-mirror-rest.fullname\" $ }}"
+          port: 80
+      matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1
+  target:
+    group: ""
+    kind: Service
+
+global:
+  gateway:
+    enabled: false
+    hostnames: []
+  image: {}
+  middleware: false
+  namespaceOverride: ""
+  podAnnotations: {}
+
+hpa:
+  behavior: {}
+  enabled: true
+  maxReplicas: 15
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+
+  minReplicas: 1
+
+image:
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+  registry: gcr.io
+  repository: mirrornode/hedera-mirror-rest
+  tag: ""  # Defaults to the chart's app version
+
+ingress:
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: '{{ include "hedera-mirror-rest.namespace" . }}-{{ include "hedera-mirror-rest.fullname" . }}@kubernetescrd'
+  enabled: true
+  hosts:
+    - host: ""
+      paths: ["/api/v1"]
+  tls:
+    enabled: false
+    secretName: ""
+
+labels: {}
+
+livenessProbe:
+  httpGet:
+    path: /health/liveness
+    port: http
+  initialDelaySeconds: 25
+  timeoutSeconds: 2
+
+middleware:
+  - circuitBreaker:
+      expression: NetworkErrorRatio() > 0.25 || ResponseCodeRatio(500, 600, 0, 600) > 0.25
+  - retry:
+      attempts: 10
+      initialInterval: 100ms
+
+monitor:
+  config:
+    servers:
+      - baseUrl: "http://{{ .Release.Name }}-rest:{{ .Values.service.port }}"
+        name: kubernetes
+        restJavaUrl: "http://{{ .Release.Name }}-restjava:{{ .Values.service.port }}"
+        web3Url: "http://{{ .Release.Name }}-web3:{{ .Values.service.port }}"
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    registry: gcr.io
+    repository: mirrornode/hedera-mirror-rest-monitor
+    tag: ""  # Defaults to the chart's app version
+  nodeSelector: {}
+  priorityClassName: ""
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
+  service:
+    type: ClusterIP
+  test:
+    annotations:
+      helm.sh/hook: test-success
+      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+      helm.sh/hook-weight: "20"
+    enabled: true
+    image:
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      repository: curlimages/curl
+      tag: latest
+    priorityClassName: ""
+  tolerations: []
+
+nameOverride: ""
+
+nodeSelector: {}
+
+podAnnotations: {}
+
+podDisruptionBudget:
+  enabled: false
+  # maxUnavailable: 0
+  minAvailable: 50%
+
+podSecurityContext:
+  fsGroup: 1000
+  runAsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+priorityClassName: ""
+
+prometheusRules:
+  enabled: false
+  RestErrors:
+    annotations:
+      description: "REST API 5xx error rate for {{ $labels.namespace }} is {{ $value | humanizePercentage }}"
+      summary: "Mirror REST API error rate exceeds 1%"
+    enabled: true
+    expr: sum(rate(api_request_total{container="rest",code=~"^5.."}[1m])) by (namespace) / sum(rate(api_request_total{container="rest"}[1m])) by (namespace) > 0.01
+    for: 1m
+    labels:
+      severity: critical
+      application: hedera-mirror-rest
+
+  RestHighCPU:
+    annotations:
+      description: "{{ $labels.namespace }}/{{ $labels.pod }} CPU usage reached {{ $value | humanizePercentage }}"
+      summary: "Mirror REST API CPU usage exceeds 80%"
+    enabled: true
+    expr: sum(nodejs_process_cpu_usage_percentage{container="rest"}) by (namespace, pod) / 100 > 0.8
+    for: 5m
+    labels:
+      severity: critical
+      application: hedera-mirror-rest
+      area: resource
+
+  RestNoPodsReady:
+    annotations:
+      description: "No REST API instances are currently running in {{ $labels.namespace }}"
+      summary: No REST API instances running
+    enabled: true
+    expr: sum(kube_pod_status_ready{pod=~".*-rest-.*",condition="true"}) by (namespace) < 1
+    for: 2m
+    labels:
+      severity: critical
+      application: hedera-mirror-rest
+      area: resource
+
+  RestNoRequests:
+    annotations:
+      description: "REST API has not seen any requests to {{ $labels.namespace }} for 5m"
+      summary: "No Mirror REST API requests seen for awhile"
+    enabled: true
+    expr: sum(rate(api_all_request_total{container="rest"}[3m])) by (namespace) <= 0
+    for: 5m
+    labels:
+      severity: warning
+      application: hedera-mirror-rest
+
+  RestRequestLatency:
+    annotations:
+      description: "{{ $labels.namespace }}/{{ $labels.pod }} is taking {{ $value }} ms to generate a response"
+      summary: "Mirror REST API request latency exceeds 2s"
+    enabled: true
+    expr: sum(rate(api_request_duration_milliseconds_sum{container="rest"}[5m])) by (namespace, pod) / sum(rate(api_request_duration_milliseconds_count{container="rest"}[5m])) by (namespace, pod) > 2000
+    for: 1m
+    labels:
+      severity: warning
+      application: hedera-mirror-rest
+
+readinessProbe:
+  httpGet:
+    path: /health/readiness
+    port: http
+  initialDelaySeconds: 30
+  timeoutSeconds: 2
+
+# Only set if HPA is disabled
+# replicas: 1
+
+resources:
+  limits:
+    cpu: 1100m
+    memory: 350Mi
+  requests:
+    cpu: 700m
+    memory: 64Mi
+
+revisionHistoryLimit: 3
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+
+service:
+  annotations: {}
+  port: 80
+  type: ClusterIP
+
+serviceAccount:
+  create: true
+  # The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+  name:
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+
+terminationGracePeriodSeconds: 60
+
+test:
+  annotations:
+    helm.sh/hook: test-success
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  checks:
+    accounts: true
+    transactions: true
+  enabled: true
+  image:
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    repository: bats/bats
+    tag: 1.11.0
+  priorityClassName: ""
+
+tolerations: []
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 10%
+    maxUnavailable: 25%
+
+# Volumes to add to the container. The key is the volume name and the value is the volume mount definition. The same keys should also appear in volumes below.
+volumeMounts:
+  config:
+    mountPath: /usr/etc/hedera
+
+# Volume mounts to add to the container. The key is the volume name and the value is the volume definition. Evaluated as a template.
+volumes:
+  config:
+    secret:
+      defaultMode: 420
+      secretName: '{{ include "hedera-mirror-rest.fullname" . }}'

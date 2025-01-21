@@ -1,0 +1,18 @@
+{
+  "description": "Topic messages for single message with invalid param values",
+  "setup": {},
+  "url": "/api/v1/topics/0.0.-3/messages/a",
+  "responseStatus": 400,
+  "responseJson": {
+    "_status": {
+      "messages": [
+        {
+          "message": "Invalid parameter: topic.id"
+        },
+        {
+          "message": "Invalid parameter: sequencenumber"
+        }
+      ]
+    }
+  }
+}

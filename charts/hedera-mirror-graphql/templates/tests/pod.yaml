@@ -1,0 +1,47 @@
+{{- if .Values.test.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations: {{- toYaml .Values.test.annotations | nindent 4 }}
+  labels: {{- include "hedera-mirror-graphql.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "hedera-mirror-graphql.name" . }}-test
+  name: {{ include "hedera-mirror-graphql.fullname" . }}-test
+  namespace: {{ include "hedera-mirror-graphql.namespace" . }}
+spec:
+  containers:
+    - name: test
+      image: "{{ .Values.test.image.repository }}:{{ .Values.test.image.tag }}"
+      imagePullPolicy: {{ .Values.test.image.pullPolicy }}
+      args:
+        - run
+        - /test/postman.json
+        - --env-var
+        - baseUrl=http://{{ include "hedera-mirror-graphql.fullname" . }}:{{ .Values.service.port }}
+        - --env-var
+        - default_account={{ .Values.test.defaultAccount }}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ALL]
+        readOnlyRootFilesystem: true
+      volumeMounts:
+        - name: graphql-test
+          mountPath: /test
+          readOnly: true
+  imagePullSecrets: {{ toYaml .Values.test.image.pullSecrets | nindent 4 }}
+  priorityClassName: {{ .Values.test.priorityClassName }}
+  restartPolicy: Never
+  securityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  terminationGracePeriodSeconds: 1
+  volumes:
+    - name: graphql-test
+      configMap:
+        defaultMode: 420
+        name: {{ include "hedera-mirror-graphql.fullname" . }}-test
+{{- end -}}

@@ -1,0 +1,30 @@
+{
+  "description": "Topic messages for single message with non matching response",
+  "matrix": "topicMessageLookupMatrix.js",
+  "setup": {
+    "accounts": [
+      {
+        "num": 7,
+        "type": "TOPIC"
+      }
+    ],
+    "topicmessages": [
+      {
+        "consensus_timestamp": "1234567890000000001",
+        "sequence_number": 1,
+        "topic_id": 7
+      }
+    ]
+  },
+  "url": "/api/v1/topics/7/messages/2",
+  "responseStatus": 404,
+  "responseJson": {
+    "_status": {
+      "messages": [
+        {
+          "message": "Not found"
+        }
+      ]
+    }
+  }
+}

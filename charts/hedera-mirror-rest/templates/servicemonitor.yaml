@@ -1,0 +1,15 @@
+{{- if .Values.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels: {{ include "hedera-mirror-rest.labels" . | nindent 4 }}
+  name: {{ include "hedera-mirror-rest.fullname" . }}
+  namespace: {{ include "hedera-mirror-rest.namespace" . }}
+spec:
+  endpoints:
+    - interval: {{ .Values.serviceMonitor.interval }}
+      path: /swagger/metrics
+      port: http
+  selector:
+    matchLabels: {{ include "hedera-mirror-rest.selectorLabels" . | nindent 6 }}
+{{- end -}}

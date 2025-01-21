@@ -1,0 +1,12 @@
+{
+  "description": "Contract logs api calls with no content found",
+  "setup": {},
+  "urls": ["/api/v1/contracts/0.0.1000/results/logs"],
+  "responseStatus": 200,
+  "responseJson": {
+    "logs": [],
+    "links": {
+      "next": null
+    }
+  }
+}

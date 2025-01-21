@@ -1,0 +1,30 @@
+# Default code owners for entire repository
+*   @hashgraph/mirror-node
+
+#########################
+#####  Core Files  ######
+#########################
+
+# NOTE: Must be placed last to ensure enforcement over all other rules
+
+# Protection Rules for Github Configuration Files and Actions Workflows
+/.github/                                       @hashgraph/platform-ci @hashgraph/mirror-node @hashgraph/release-engineering-managers
+/.github/workflows/                             @hashgraph/platform-ci @hashgraph/platform-ci-committers @hashgraph/mirror-node @hashgraph/release-engineering-managers
+
+# Codacy Tool Configurations
+/config/                                        @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/mirror-node
+.remarkrc                                       @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/mirror-node
+
+# Self-protection for root CODEOWNERS files (this file should not exist and should definitely require approval)
+/CODEOWNERS                                     @hashgraph/release-engineering-managers
+
+# Protect the repository root files
+/README.md                                      @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/mirror-node
+**/LICENSE                                      @hashgraph/release-engineering-managers
+
+# CodeCov configuration
+**/codecov.yml                                  @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/mirror-node
+
+# Git Ignore definitions
+**/.gitignore                                   @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/mirror-node
+**/.gitignore.*                                 @hashgraph/platform-ci @hashgraph/release-engineering-managers @hashgraph/mirror-node

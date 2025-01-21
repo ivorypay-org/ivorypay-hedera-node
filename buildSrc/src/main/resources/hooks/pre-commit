@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+CI=${CI:-false}
+
+if [[ "${CI}" == "true" ]]; then
+    echo "Skipping Spotless in CI"
+    exit 0
+fi
+
+rootDir=$(pwd)
+filesStr="$(git diff --name-only --cached --diff-filter=ACMRTUB HEAD)"
+files=($filesStr)
+echo "Running Spotless to format ${#files[@]} changed files"
+
+if [[ ${#files[@]} -gt 0 ]]; then
+  ./gradlew spotlessApply
+
+  for file in ${files[@]}; do
+    git add "${rootDir}/${file}"
+  done
+fi
+

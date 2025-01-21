@@ -1,0 +1,84 @@
+{
+  "description": "Transaction api calls using repeated valid queries. Results in param combination with no matching result.",
+  "matrix": "bindTimestampRangeMatrix.js",
+  "setup": {
+    "features": {
+      "fakeTime": "2019-08-14T10:50:00Z"
+    },
+    "accounts": [
+      {
+        "num": 3
+      },
+      {
+        "num": 8
+      },
+      {
+        "num": 9
+      },
+      {
+        "num": 10
+      },
+      {
+        "num": 98
+      }
+    ],
+    "transactions": [
+      {
+        "charged_tx_fee": 0,
+        "payerAccountId": "0.0.9",
+        "nodeAccountId": "0.0.3",
+        "consensus_timestamp": "1565779444711927001",
+        "name": "CRYPTOUPDATEACCOUNT",
+        "type": "15",
+        "entity_id": "0.0.8"
+      }
+    ],
+    "cryptotransfers": [
+      {
+        "consensus_timestamp": "1565779111711927001",
+        "payerAccountId": "0.0.10",
+        "recipientAccountId": "0.0.9",
+        "amount": 10,
+        "nodeAccountId": "0.0.3",
+        "treasuryAccountId": "0.0.98",
+        "result": 24
+      },
+      {
+        "consensus_timestamp": "1565779209711927001",
+        "payerAccountId": "0.0.10",
+        "recipientAccountId": "0.0.9",
+        "amount": 20,
+        "nodeAccountId": "0.0.3",
+        "treasuryAccountId": "0.0.98"
+      },
+      {
+        "consensus_timestamp": "1565779333711927001",
+        "payerAccountId": "0.0.8",
+        "recipientAccountId": "0.0.9",
+        "amount": 30,
+        "nodeAccountId": "0.0.3",
+        "treasuryAccountId": "0.0.98",
+        "result": 25
+      },
+      {
+        "consensus_timestamp": "1565779666711927001",
+        "payerAccountId": "0.0.8",
+        "recipientAccountId": "0.0.9",
+        "amount": 40,
+        "nodeAccountId": "0.0.3",
+        "treasuryAccountId": "0.0.98"
+      }
+    ]
+  },
+  "urls": [
+    "/api/v1/transactions?timestamp=1565779209.711927001&account.id=0.0.9&type=credit&result=success&timestamp=1565779666.711927001",
+    "/api/v1/transactions?timestamp=1565779209.711927001&account.id=0.0.9&type=credit&type=debit&result=success"
+  ],
+  "responseStatus": 200,
+  "responseJson": {
+    "transactions": [],
+    "links": {
+      "next": null
+    }
+  }
+}

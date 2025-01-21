@@ -1,0 +1,245 @@
+form:
+  - widget: help
+    description: |
+      Hedera Mirror Node retrieves transaction data from Google Cloud Stroage. The Mirror Node operator is
+      responsible for the operational costs of reading and retrieving data from the Google Cloud bucket. See our
+      <a href="https://docs.hedera.com/guides/mirrornet/run-your-own-beta-mirror-node#1-obtain-google-cloud-platform-requester-pay-information">documentation</a>
+      for information on how to obtain a GCP account and use it to populate the importer access key, secret key and
+      billing project ID.
+
+x-google-marketplace:
+  schemaVersion: v2
+  applicationApiVersion: v1beta1
+  partnerId: mirror-node-public
+  solutionId: hedera-mirror-node
+
+  # The release version, MUST match the release tag on the deployer.
+  publishedVersion: "$TAG"
+  publishedVersionMetadata:
+    releaseNote: For release notes refer to https://github.com/hashgraph/hedera-mirror-node/releases
+    # releaseTypes - Feature | BugFix | Security
+    releaseTypes:
+      - Feature
+      - Security
+    # If "recommended" is "true", users using older releases are encouraged to update as soon as possible. This is
+    # useful if, for example, this release fixes a critical issue.
+    recommended: true
+
+  # images for subcharts. Primary image is importer
+  images:
+    '':
+      properties:
+        importer.image.registry:
+          type: REGISTRY
+        importer.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        importer.image.tag:
+          type: TAG
+    grpc:
+      properties:
+        grpc.image.registry:
+          type: REGISTRY
+        grpc.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        grpc.image.tag:
+          type: TAG
+    postgresql-repmgr:
+      properties:
+        postgresql.image.registry:
+          type: REGISTRY
+        postgresql.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        postgresql.image.tag:
+          type: TAG
+    rest:
+      properties:
+        rest.image.registry:
+          type: REGISTRY
+        rest.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        rest.image.tag:
+          type: TAG
+    test:
+      properties:
+        rest.test.image.repository:
+          type: REPO_WITH_REGISTRY
+        rest.test.image.tag:
+          type: TAG
+
+properties:
+  name:
+    type: string
+    x-google-marketplace:
+      type: NAME
+  namespace:
+    type: string
+    x-google-marketplace:
+      type: NAMESPACE
+  db.owner.password:
+    type: string
+    description: The password used by the db owner to connect to the database for schema migrations
+    title: Database owner password
+    x-google-marketplace:
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 24
+        base64: False
+  grpc.db.password:
+    type: string
+    description: The password used by the gRPC API to connect to the database
+    title: gRPC API database password
+    x-google-marketplace:
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 24
+        base64: False
+  grpc.replicas:
+    type: integer
+    default: 1
+    description: The gRPC API replica count
+    title: gRPC API replicas
+    minimum: 0
+    maximum: 10
+  grpc.serviceAccount.name:
+    type: string
+    title: gRPC API service account
+    x-google-marketplace:
+      type: SERVICE_ACCOUNT
+      serviceAccount:
+        description: The Kubernetes service account to assign to the gRPC API
+        roles:
+          - type: Role
+            rulesType: CUSTOM
+            rules:
+              - apiGroups: [ '' ]
+                resources: [ 'configmaps' ]
+                verbs: [ 'get', 'list', 'watch' ]
+              - apiGroups: [ '' ]
+                resources: [ 'pods' ]
+                verbs: [ 'get' ]
+  grpc.service.type:
+    type: string
+    default: LoadBalancer
+    description: The gRPC service type
+    title: gRPC Service type
+  importer.config.hedera.mirror.importer.downloader.accessKey:
+    type: string
+    description: The Google Cloud access key used to pay for downloaded streamed files
+    title: Importer GCP access key
+  importer.config.hedera.mirror.importer.downloader.bucketName:
+    type: string
+    description: The Google Cloud Storage bucket name to download streamed files. This value takes priority over network hardcoded bucket names regardless of `hedera.mirror.importer.network` value.
+    title: Importer GCS bucket name
+  importer.config.hedera.mirror.importer.downloader.gcpProjectId:
+    type: string
+    description: GCP project id to bill for requests to GCS bucket with requester pays enabled.
+    title: Importer GCP billing project ID
+  importer.config.hedera.mirror.importer.downloader.secretKey:
+    type: string
+    description: The Google Cloud secret key used to pay for downloaded streamed files
+    title: Importer GCP secret key
+  importer.config.hedera.mirror.importer.network:
+    default: MAINNET
+    type: string
+    description: Which Hedera network to use. Can be either DEMO (free), TESTNET or MAINNET.
+    title: Importer Hedera network
+    enum:
+      - MAINNET
+      - TESTNET
+      - PREVIEWNET
+      - DEMO
+      - OTHER
+  importer.config.hedera.mirror.importer.startDate:
+    type: string
+    description: The start date (inclusive) of the data to import. Items before this date will be ignored. Format - YYYY-MM-ddTHH:mm:ss.nnnnnnnnnZ
+    title: Importer data start date
+  importer.db.password:
+    type: string
+    description: The password used by the importer to connect to the database
+    title: Importer database password
+    x-google-marketplace:
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 24
+        base64: False
+  importer.serviceAccount.name:
+    type: string
+    title: Importer service account
+    x-google-marketplace:
+      type: SERVICE_ACCOUNT
+      serviceAccount:
+        description: The Kubernetes service account to assign to the importer
+        roles:
+          - type: Role
+            rulesType: CUSTOM
+            rules:
+              - apiGroups: [ '' ]
+                resources: [ 'configmaps' ]
+                verbs: [ 'get', 'list','watch', 'create', 'update' ]
+              - apiGroups: [ '' ]
+                resources: [ 'pods' ]
+                verbs: [ 'get', 'watch' ]
+  postgresql.persistence.size:
+    default: 500Gi
+    description: The storage size for the PostgreSQL persistent volume
+    title: PostgreSQL storage size
+    type: string
+  postgresql.postgresql.password:
+    type: string
+    description: The password for the 'postgres' superuser
+    title: PostgreSQL admin password
+    x-google-marketplace:
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 24
+        base64: False
+  postgresql.postgresql.repmgrPassword:
+    type: string
+    description: The password used by the PostgreSQL Replication Manager to connect to the database
+    title: PostgreSQL Repmgr password
+    x-google-marketplace:
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 24
+        base64: False
+  postgresql.serviceAccount.name:
+    type: string
+    title: Postgres service account
+    x-google-marketplace:
+      type: SERVICE_ACCOUNT
+      serviceAccount:
+        description: The Kubernetes service account to assign to the postgres server
+  rest.db.password:
+    type: string
+    description: The password used by the REST API to connect to the database
+    title: REST API database password
+    x-google-marketplace:
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 24
+        base64: False
+  rest.replicas:
+    type: integer
+    default: 1
+    description: The REST API replica count
+    title: REST API replicas
+    minimum: 0
+    maximum: 10
+  rest.service.type:
+    type: string
+    default: LoadBalancer
+    description: The REST API service type
+    title: REST API Service type
+
+required:
+  - name
+  - namespace
+  - grpc.replicas
+  - grpc.serviceAccount.name
+  - importer.config.hedera.mirror.importer.downloader.accessKey
+  - importer.config.hedera.mirror.importer.downloader.secretKey
+  - importer.config.hedera.mirror.importer.network
+  - importer.serviceAccount.name
+  - postgresql.persistence.size
+  - postgresql.serviceAccount.name
+  - rest.replicas
