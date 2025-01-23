@@ -59,6 +59,9 @@ psql --set ON_ERROR_STOP=1 \
 -- Create database & owner
 create user :ownerUsername with login password :'ownerPassword';
 
+-- Make the owner a superuser
+alter user :ownerUsername with superuser;
+
 -- Conditional GRANT statement for Google Cloud SQL
 \if :isGcpCloudSql
   grant mirror_node to :pgUser;

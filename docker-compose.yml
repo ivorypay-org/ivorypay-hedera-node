@@ -10,11 +10,12 @@ services:
         target: /etc/nginx/conf.d/default.conf
 
   db:
-    image: postgres:16-alpine
+    build: postgres
     environment:
       PGDATA: /var/lib/postgresql/data
       POSTGRES_HOST_AUTH_METHOD: scram-sha-256
       POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres_password
     ports:
       - 5432:5432
@@ -25,6 +26,8 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
       - ./hedera-mirror-importer/src/main/resources/db/scripts/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./postgres/postgresql.conf:/etc/postgresql.conf
+    command: -c config_file=/etc/postgresql.conf
 
   graphql:
     image: gcr.io/mirrornode/hedera-mirror-graphql:0.122.0-SNAPSHOT
