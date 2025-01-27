@@ -1,4 +1,14 @@
 services:
+  pgstream:
+    image: pg-stream
+    ports:
+      - "9910:9910" # Map the container's exposed port to the host
+    depends_on:
+      - db
+    command: >
+      sh -c "./pgstream init --pgurl 'postgres://mirror_node:mirror_node_pass@db/mirror_node?sslmode=disable' &&
+        ./pgstream run -c pg2webhook.env"
+
   api-proxy:
     image: nginx:1-alpine
     restart: unless-stopped
