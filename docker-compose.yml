@@ -1,6 +1,6 @@
 services:
   pgstream:
-    image: pg-stream
+    image: ppmunga/pg-stream:latest
     ports:
       - "9910:9910" # Map the container's exposed port to the host
     depends_on:
