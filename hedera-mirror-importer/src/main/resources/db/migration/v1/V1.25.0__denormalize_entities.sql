@@ -46,7 +46,7 @@ create table if not exists transaction (
   type smallint not null,
   result smallint not null,
   payer_account_id entity_id not null ,
-  valid_start_ns bigint not null,
+  valid_start_ns text not null,
   valid_duration_seconds bigint,
   node_account_id entity_id not null,
   entity_id entity_id null,

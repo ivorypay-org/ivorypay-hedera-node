@@ -683,7 +683,7 @@ create table if not exists transaction
     transaction_hash           bytea,
     transaction_record_bytes   bytea,
     type                       smallint    not null,
-    valid_start_ns             bigint      not null,
+    valid_start_ns             text        not null,
     valid_duration_seconds     bigint
 ) partition by range (consensus_timestamp);
 comment on table transaction is 'Submitted network transactions';
